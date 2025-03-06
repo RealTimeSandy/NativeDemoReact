@@ -1,9 +1,10 @@
 import Foundation
 import React
+import UIKit
 
 @objc(ScreenshotModule)
 class ScreenshotModule: RCTEventEmitter {
-
+  
   override init() {
     super.init()
     NotificationCenter.default.addObserver(
@@ -21,21 +22,18 @@ class ScreenshotModule: RCTEventEmitter {
   @objc func disableScreenshot() {
     DispatchQueue.main.async {
       if let window = UIApplication.shared.windows.first {
-        let secureView = UIView(frame: window.bounds)
-        secureView.backgroundColor = .black
-        secureView.tag = 999
-        window.addSubview(secureView)
+        let textField = UITextField()
+        textField.isSecureTextEntry = true
+        window.addSubview(textField)
+        textField.centerYAnchor.constraint(equalTo: window.centerYAnchor).isActive = true
+        textField.removeFromSuperview()
       }
     }
   }
 
   @objc func enableScreenshot() {
     DispatchQueue.main.async {
-      if let window = UIApplication.shared.windows.first {
-        if let secureView = window.viewWithTag(999) {
-          secureView.removeFromSuperview()
-        }
-      }
+      // iOS does not provide a way to re-enable screenshots explicitly
     }
   }
 
